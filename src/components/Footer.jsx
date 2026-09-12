@@ -1,309 +1,688 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ShieldCheck, Award, Heart, Phone, Mail, MapPin, ArrowRight, CheckCircle2, HelpCircle, X, Truck, FileText } from 'lucide-react';
-import { useToast } from '../context/ToastContext';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  ShieldCheck,
+  Award,
+  Heart,
+  Phone,
+  Mail,
+  MapPin,
+  ArrowRight,
+  CheckCircle2,
+  HelpCircle,
+  X,
+  Truck,
+  FileText,
+  Leaf,
+  Sparkles,
+} from "lucide-react";
 
-export default function Footer() {
-  const [email, setEmail] = useState('');
+import { useToast } from "../context/ToastContext";
+
+const Footer = () => {
+  const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+
   const { addToast } = useToast();
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    if (email && email.includes('@')) {
+
+    if (email && email.includes("@")) {
       setSubscribed(true);
-      addToast('Thank you for subscribing to ShreeKrishna Organics newsletter!');
-      setEmail('');
+      addToast(
+        "Thank you for subscribing to ShreeKrishna Organics newsletter!"
+      );
+      setEmail("");
     }
   };
 
+  const services = [
+    {
+      icon: Truck,
+      title: "Home Delivery",
+      link: "/shop",
+    },
+    {
+      icon: Heart,
+      title: "Bulk Orders & Gifting",
+      link: "/contact",
+    },
+    {
+      icon: CheckCircle2,
+      title: "Track Order Status",
+      link: "/orders",
+    },
+    {
+      icon: Leaf,
+      title: "Custom Wood-Pressing",
+      link: "/about#extraction",
+    },
+    {
+      icon: Award,
+      title: "Farmer Collective Program",
+      link: "/about#farmers",
+    },
+  ];
+
+  const policies = [
+    {
+      title: "Privacy Policy",
+      link: "/contact",
+    },
+    {
+      title: "Returns & Refunds",
+      link: "/contact",
+    },
+    {
+      title: "Terms of Use",
+      link: "/contact",
+    },
+    {
+      title: "Shipping & Delivery Terms",
+      link: "/contact",
+    },
+    {
+      title: "Lab Certification Standards",
+      link: "/about",
+    },
+  ];
+
   return (
     <>
-      <footer className="bg-[#1F1813] text-[#FAF6EF] pt-16 pb-12 border-t border-[#2B241D]">
+      {/* =========================
+          FOOTER
+      ========================== */}
+      <footer className="bg-[#F4EFE4] text-[#2F3A2F] border-t border-[#DED8C8]">
 
-        {/* Top Trust Banner / 4 Pillars */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 border-b border-white/10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-[#2B241D] text-[#B5563C] flex items-center justify-center shrink-0 border border-[#B5563C]/30">
-                <Award className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold font-serif text-stone-100">100% Wood-Pressed</h4>
-                <p className="text-xs text-stone-400 mt-1">Slow crushed in Vaagai wood at &lt; 40°C</p>
-              </div>
-            </div>
+        {/* =========================
+            TRUST FEATURES
+        ========================== */}
+        <div className="border-b border-[#DED8C8]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-[#2B241D] text-[#B5563C] flex items-center justify-center shrink-0 border border-[#B5563C]/30">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold font-serif text-stone-100">Zero Chemical Solvents</h4>
-                <p className="text-xs text-stone-400 mt-1">No hexane, bleaching, or deodorizing</p>
-              </div>
-            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-[#2B241D] text-[#B5563C] flex items-center justify-center shrink-0 border border-[#B5563C]/30">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold font-serif text-stone-100">Single-Origin Seeds</h4>
-                <p className="text-xs text-stone-400 mt-1">Direct from 350+ certified organic farmers</p>
-              </div>
-            </div>
+              {/* Card 1 */}
+              <div className="bg-[#FBF9F2] border border-[#DED8C8] rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-[#E7EBDD] flex items-center justify-center">
+                  <ShieldCheck className="w-6 h-6 text-[#3F5F45]" />
+                </div>
 
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-2xl bg-[#2B241D] text-[#B5563C] flex items-center justify-center shrink-0 border border-[#B5563C]/30">
-                <Heart className="w-5 h-5" />
+                <div>
+                  <h3 className="font-bold text-[#2F4935]">
+                    100% Authentic
+                  </h3>
+
+                  <p className="text-sm text-[#687064] mt-1 leading-5">
+                    Pure ingredients with no adulteration.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-sm font-bold font-serif text-stone-100">Lab Tested Batches</h4>
-                <p className="text-xs text-stone-400 mt-1">100% NABL & FSSAI compliant purity</p>
+
+              {/* Card 2 */}
+              <div className="bg-[#FBF9F2] border border-[#DED8C8] rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-[#E7EBDD] flex items-center justify-center">
+                  <Award className="w-6 h-6 text-[#3F5F45]" />
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-[#2F4935]">
+                    Lab Tested
+                  </h3>
+
+                  <p className="text-sm text-[#687064] mt-1 leading-5">
+                    Independently tested for quality.
+                  </p>
+                </div>
               </div>
+
+              {/* Card 3 */}
+              <div className="bg-[#FBF9F2] border border-[#DED8C8] rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-[#E7EBDD] flex items-center justify-center">
+                  <Heart className="w-6 h-6 text-[#3F5F45]" />
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-[#2F4935]">
+                    Made With Care
+                  </h3>
+
+                  <p className="text-sm text-[#687064] mt-1 leading-5">
+                    Traditional methods, modern hygiene.
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 4 */}
+              <div className="bg-[#FBF9F2] border border-[#DED8C8] rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-all duration-300">
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-[#E7EBDD] flex items-center justify-center">
+                  <Leaf className="w-6 h-6 text-[#3F5F45]" />
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-[#2F4935]">
+                    Natural Products
+                  </h3>
+
+                  <p className="text-sm text-[#687064] mt-1 leading-5">
+                    Traditional and minimally processed.
+                  </p>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
 
-        {/* Main Footer Links (Aligned to Wireframe: Business Address, Services, Policies, Support) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+        {/* =========================
+            MAIN FOOTER
+        ========================== */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
 
-            {/* Col 1: Brand & Full Business Address (Wireframe Col 1) */}
-            <div className="lg:col-span-4 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+            {/* =========================
+                BRAND SECTION
+            ========================== */}
+            <div className="lg:col-span-4">
+
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#FAF6EF] text-[#2B241D] flex items-center justify-center font-serif font-bold text-lg">
-                  SK
+
+                <div className="w-12 h-12 rounded-2xl bg-[#3F5F45] flex items-center justify-center shadow-sm">
+                  <Leaf className="w-6 h-6 text-white" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-serif font-bold text-xl tracking-wider text-stone-100">
-                    SHREEKRISHNA ORGANICS
-                  </span>
-                  <span className="text-[10px] tracking-[0.2em] text-[#B5563C] font-semibold uppercase">
-                    Pure Tradition, Naturally
-                  </span>
+
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-extrabold text-[#2F4935]">
+                    ShreeKrishna
+                  </h2>
+
+                  <p className="text-sm font-semibold text-[#718355]">
+                    Organics Pvt Ltd
+                  </p>
                 </div>
+
               </div>
 
-              <p className="text-xs sm:text-sm text-stone-300 font-sans leading-relaxed">
-                Reviving India's traditional cold & wood-pressing (*Ghani / Marachekku*) heritage. We deliver unrefined edible oils, organic palm jaggery, and Vedic A2 ghee to conscious kitchens.
+              <p className="mt-6 text-sm leading-7 text-[#687064] max-w-md">
+                Reviving India's traditional cold & wood-pressing
+                (Ghani / Marachekku) heritage. We deliver unrefined
+                edible oils, organic palm jaggery, and Vedic A2 ghee
+                to conscious kitchens.
               </p>
 
-              {/* Business Address & Contact Info per wireframe */}
-              <div className="pt-2 space-y-2.5 text-xs text-stone-300">
-                <div className="flex items-start gap-2.5">
-                  <MapPin className="w-4 h-4 text-[#B5563C] shrink-0 mt-0.5" />
-                  <span>
-                    <strong>ShreeKrishna Organics Pvt Ltd</strong><br />
-                    Karad<br />
-                    Karad,Maharashtra-415110
-                  </span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Phone className="w-4 h-4 text-[#B5563C] shrink-0" />
-                  <span>Care: +91 98765 43210 (Mon – Sat, 9am – 7pm)</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Mail className="w-4 h-4 text-[#B5563C] shrink-0" />
-                  <span>care@shreekrishnaorganics.com</span>
-                </div>
+              {/* Tagline */}
+              <div className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#E7EBDD] text-[#3F5F45] text-sm font-semibold">
+                <Sparkles className="w-4 h-4" />
+                Pure Tradition, Naturally
               </div>
+
+              {/* =========================
+                  CONTACT INFO
+              ========================== */}
+              <div className="mt-7 space-y-4">
+
+                {/* Address */}
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5">
+                    <MapPin className="w-5 h-5 text-[#718355]" />
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-semibold text-[#2F4935]">
+                      ShreeKrishna Organics Pvt Ltd
+                    </p>
+
+                    <p className="text-sm text-[#687064] mt-1">
+                      Karad, Maharashtra-415110
+                    </p>
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <div className="flex items-start gap-3">
+
+                  <Phone className="w-5 h-5 text-[#718355] mt-0.5" />
+
+                  <div>
+                    <a
+                      href="tel:+919876543210"
+                      className="text-sm font-semibold text-[#2F4935] hover:text-[#718355] transition-colors"
+                    >
+                      +91 98765 43210
+                    </a>
+
+                    <p className="text-xs text-[#687064] mt-1">
+                      Mon – Sat, 9am – 7pm
+                    </p>
+                  </div>
+
+                </div>
+
+                {/* Email */}
+                <div className="flex items-start gap-3">
+
+                  <Mail className="w-5 h-5 text-[#718355] mt-0.5" />
+
+                  <div>
+                    <a
+                      href="mailto:care@shreekrishnaorganics.com"
+                      className="text-sm font-semibold text-[#2F4935] hover:text-[#718355] transition-colors break-all"
+                    >
+                      care@shreekrishnaorganics.com
+                    </a>
+
+                    <p className="text-xs text-[#687064] mt-1">
+                      Customer support
+                    </p>
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* =========================
+                  SOCIAL MEDIA
+              ========================== */}
+              <div className="flex items-center gap-2 mt-7">
+
+                {/* Instagram */}
+                <a
+                  href="#"
+                  aria-label="Instagram"
+                  className="w-10 h-10 rounded-xl bg-[#FBF9F2] border border-[#DED8C8] flex items-center justify-center text-[#3F5F45] hover:bg-[#3F5F45] hover:text-white hover:border-[#3F5F45] transition-all"
+                >
+                  <span className="text-xs font-bold">
+                    IG
+                  </span>
+                </a>
+
+                {/* Facebook */}
+                <a
+                  href="#"
+                  aria-label="Facebook"
+                  className="w-10 h-10 rounded-xl bg-[#FBF9F2] border border-[#DED8C8] flex items-center justify-center text-[#3F5F45] hover:bg-[#3F5F45] hover:text-white hover:border-[#3F5F45] transition-all"
+                >
+                  <span className="text-xs font-bold">
+                    FB
+                  </span>
+                </a>
+
+                {/* YouTube */}
+                <a
+                  href="#"
+                  aria-label="YouTube"
+                  className="w-10 h-10 rounded-xl bg-[#FBF9F2] border border-[#DED8C8] flex items-center justify-center text-[#3F5F45] hover:bg-[#3F5F45] hover:text-white hover:border-[#3F5F45] transition-all"
+                >
+                  <span className="text-xs font-bold">
+                    YT
+                  </span>
+                </a>
+
+              </div>
+
             </div>
 
-            {/* Col 2: Services (Wireframe Col 2) */}
-            <div className="lg:col-span-2 space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-[#C68A2E]">
+            {/* =========================
                 SERVICES
-              </h4>
-              <ul className="space-y-2.5 text-xs text-stone-300">
-                <li>
-                  <Link to="/shop" className="hover:text-white transition-colors flex items-center gap-1.5">
-                    <Truck className="w-3.5 h-3.5 text-[#B5563C]" /> Home Delivery
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-white transition-colors">
-                    Bulk Orders & Gifting
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/orders" className="hover:text-white transition-colors">
-                    Track Order Status
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about#extraction" className="hover:text-white transition-colors">
-                    Custom Wood-Pressing
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about#farmers" className="hover:text-white transition-colors">
-                    Farmer Collective Program
-                  </Link>
-                </li>
-              </ul>
+            ========================== */}
+            <div className="lg:col-span-2">
+
+              <h3 className="text-base font-bold text-[#2F4935] mb-5">
+                Services
+              </h3>
+
+              <div className="space-y-3.5">
+
+                {services.map((service) => {
+                  const Icon = service.icon;
+
+                  return (
+                    <Link
+                      key={service.title}
+                      to={service.link}
+                      className="group flex items-start gap-2.5 text-sm text-[#687064] hover:text-[#3F5F45] transition-colors"
+                    >
+                      <Icon className="w-4 h-4 mt-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+
+                      <span>
+                        {service.title}
+                      </span>
+                    </Link>
+                  );
+                })}
+
+              </div>
+
             </div>
 
-            {/* Col 3: Policies (Wireframe Col 3) */}
-            <div className="lg:col-span-2 space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-[#C68A2E]">
+            {/* =========================
                 POLICIES
-              </h4>
-              <ul className="space-y-2.5 text-xs text-stone-300">
-                <li>
-                  <Link to="/contact" className="hover:text-white transition-colors">
-                    Privacy Policy
+            ========================== */}
+            <div className="lg:col-span-2">
+
+              <h3 className="text-base font-bold text-[#2F4935] mb-5">
+                Policies
+              </h3>
+
+              <div className="space-y-3.5">
+
+                {policies.map((policy) => (
+                  <Link
+                    key={policy.title}
+                    to={policy.link}
+                    className="group flex items-start gap-2 text-sm text-[#687064] hover:text-[#3F5F45] transition-colors"
+                  >
+                    <FileText className="w-4 h-4 mt-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+
+                    <span>
+                      {policy.title}
+                    </span>
                   </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-white transition-colors">
-                    Returns & Refunds
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-white transition-colors">
-                    Terms of Use
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/contact" className="hover:text-white transition-colors">
-                    Shipping & Delivery Terms
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about" className="hover:text-white transition-colors">
-                    Lab Certification Standards
-                  </Link>
-                </li>
-              </ul>
+                ))}
+
+              </div>
+
             </div>
 
-            {/* Col 4: Support & Help Button (Wireframe Col 4) */}
-            <div className="lg:col-span-4 space-y-4">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-[#C68A2E]">
-                SUPPORT
-              </h4>
-              <p className="text-xs text-stone-300 leading-relaxed">
-                Have a question about our cold-pressing techniques, batch reports, or order shipping? We're here to help.
-              </p>
+            {/* =========================
+                SUPPORT + NEWSLETTER
+            ========================== */}
+            <div className="lg:col-span-4">
 
-              {/* Dedicated HELP Button per wireframe */}
-              <div className="pt-2">
+              {/* Support Card */}
+              <div className="bg-[#2F4935] rounded-2xl p-6 text-white shadow-sm">
+
+                <div className="flex items-start gap-4">
+
+                  <div className="w-11 h-11 shrink-0 rounded-xl bg-white/10 flex items-center justify-center">
+                    <HelpCircle className="w-6 h-6 text-white" />
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-lg">
+                      Need Help?
+                    </h3>
+
+                    <p className="text-sm text-white/75 mt-1 leading-6">
+                      Questions about cold-pressing techniques,
+                      batch reports, shipping or your order?
+                    </p>
+                  </div>
+
+                </div>
+
                 <button
                   type="button"
                   onClick={() => setHelpModalOpen(true)}
-                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#B5563C] hover:bg-[#9E442B] text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                  className="mt-5 w-full flex items-center justify-center gap-2 bg-white text-[#2F4935] hover:bg-[#F4EFE4] font-bold text-sm rounded-xl px-4 py-3 transition-all"
                 >
-                  <HelpCircle className="w-4 h-4" />
-                  <span>HELP & SUPPORT</span>
+                  Visit Help Desk
+                  <ArrowRight className="w-4 h-4" />
                 </button>
+
               </div>
 
-              {/* Newsletter subscription */}
-              <div className="pt-4 border-t border-white/10">
-                <span className="text-xs font-semibold text-stone-300 block mb-2">Join our Heritage Newsletter</span>
-                {subscribed ? (
-                  <div className="flex items-center gap-2 p-2.5 bg-[#2B241D] border border-[#B5563C]/40 rounded-xl text-xs text-[#FAF6EF]">
-                    <CheckCircle2 className="w-4 h-4 text-[#C68A2E]" />
-                    <span>Thank you for joining our community!</span>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubscribe} className="flex items-center bg-[#2B241D] rounded-xl border border-white/10 p-1.5 focus-within:border-[#B5563C]">
-                    <input
-                      type="email"
-                      required
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-transparent px-2.5 py-1 text-xs text-white placeholder-stone-400 focus:outline-none"
-                    />
-                    <button
-                      type="submit"
-                      className="bg-[#B5563C] hover:bg-[#9E442B] text-white px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 cursor-pointer transition-colors"
-                    >
-                      Join
-                    </button>
+              {/* Newsletter */}
+              <div className="mt-7">
+
+                <div className="flex items-center gap-2 mb-2">
+
+                  <Sparkles className="w-5 h-5 text-[#B68A3A]" />
+
+                  <h3 className="text-base font-bold text-[#2F4935]">
+                    Join our Heritage Newsletter
+                  </h3>
+
+                </div>
+
+                <p className="text-sm text-[#687064] leading-6">
+                  Get traditional wellness tips, product stories,
+                  farmer updates and exclusive offers.
+                </p>
+
+                {!subscribed ? (
+                  <form
+                    onSubmit={handleSubscribe}
+                    className="mt-4"
+                  >
+
+                    <div className="flex flex-col sm:flex-row gap-2">
+
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        required
+                        className="w-full sm:flex-1 min-w-0 rounded-xl border border-[#DED8C8] bg-[#FBF9F2] px-4 py-3 text-sm text-[#2F3A2F] outline-none focus:border-[#718355] focus:ring-2 focus:ring-[#718355]/20"
+                      />
+
+                      <button
+                        type="submit"
+                        className="shrink-0 rounded-xl bg-[#3F5F45] text-white px-5 py-3 text-sm font-bold hover:bg-[#2F4935] transition-all flex items-center justify-center gap-2"
+                      >
+                        Subscribe
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+
+                    </div>
+
                   </form>
+                ) : (
+                  <div className="mt-4 rounded-xl bg-[#E7EBDD] border border-[#D5DEC9] px-4 py-3 text-sm font-semibold text-[#3F5F45] flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 shrink-0" />
+                    Thank you for joining our community!
+                  </div>
                 )}
+
               </div>
+
             </div>
 
           </div>
+
         </div>
 
-        {/* Bottom Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-400">
-          <p>© 2026 ShreeKrishna Organics Pvt Ltd. Pure Tradition, Naturally.</p>
-          <div className="flex items-center gap-3 text-[11px]">
-            <span>FSSAI Lic. No: 10020042000123</span>
-            <span>•</span>
-            <span>100% Certified Organic</span>
-            <span>•</span>
-            <span>Made in Bharat</span>
+        {/* =========================
+            BOTTOM BAR
+        ========================== */}
+        <div className="border-t border-[#DED8C8]">
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-5">
+
+              {/* Copyright */}
+              <div className="text-center lg:text-left">
+
+                <p className="text-sm text-[#687064]">
+                  © 2026 ShreeKrishna Organics Pvt Ltd.
+                </p>
+
+                <p className="text-xs text-[#8A9186] mt-1">
+                  Pure Tradition, Naturally.
+                </p>
+
+              </div>
+
+              {/* Certifications */}
+              <div className="flex flex-wrap justify-center items-center gap-3">
+
+                <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FBF9F2] border border-[#DED8C8] text-xs font-semibold text-[#3F5F45]">
+                  <ShieldCheck className="w-4 h-4" />
+                  FSSAI Lic. No: 10020042000123
+                </div>
+
+                <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FBF9F2] border border-[#DED8C8] text-xs font-semibold text-[#3F5F45]">
+                  <CheckCircle2 className="w-4 h-4" />
+                  100% Certified Organic
+                </div>
+
+                <div className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[#FBF9F2] border border-[#DED8C8] text-xs font-semibold text-[#3F5F45]">
+                  <Heart className="w-4 h-4" />
+                  Made in Bharat
+                </div>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
+
       </footer>
 
-      {/* Interactive Quick Help & Support Modal */}
+      {/* =========================
+          HELP MODAL
+      ========================== */}
       {helpModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-[#FAF6EF] rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-[#E8DFD3] shadow-2xl relative text-[#2B241D]">
-            <button
-              onClick={() => setHelpModalOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-stone-500 hover:text-stone-900 hover:bg-stone-200 transition-colors"
-              aria-label="Close help modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div
+          className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setHelpModalOpen(false)}
+        >
 
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-[#B5563C] text-white flex items-center justify-center">
-                <HelpCircle className="w-5 h-5" />
-              </div>
+          <div
+            className="w-full max-w-lg bg-[#FBF9F2] rounded-3xl shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+
+            {/* Modal Header */}
+            <div className="bg-[#2F4935] text-white px-6 py-5 flex items-center justify-between">
+
               <div>
-                <h3 className="font-serif font-bold text-xl text-[#2B241D]">ShreeKrishna Help Desk</h3>
-                <p className="text-xs text-stone-500">Fast assistance for all your queries</p>
-              </div>
-            </div>
+                <h2 className="text-xl font-bold">
+                  ShreeKrishna Help Desk
+                </h2>
 
-            <div className="space-y-3 text-xs text-stone-700 py-2">
-              <div className="p-3.5 bg-white rounded-2xl border border-[#E8DFD3]">
-                <h4 className="font-bold text-sm text-[#2B241D] flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-[#B5563C]" /> Instant Phone & WhatsApp
-                </h4>
-                <p className="mt-1 text-stone-600">Call <strong>+91 98765 43210</strong> (Mon–Sat, 9am–7pm) for live assistance from our oil specialists.</p>
+                <p className="text-sm text-white/70 mt-1">
+                  Fast assistance for all your queries
+                </p>
               </div>
 
-              <div className="p-3.5 bg-white rounded-2xl border border-[#E8DFD3]">
-                <h4 className="font-bold text-sm text-[#2B241D] flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-[#B5563C]" /> Track an Existing Shipment
-                </h4>
-                <p className="mt-1 text-stone-600">Visit our <Link to="/orders" onClick={() => setHelpModalOpen(false)} className="text-[#B5563C] underline font-semibold">Orders page</Link> to check live Delhivery / BlueDart tracking status.</p>
-              </div>
-
-              <div className="p-3.5 bg-white rounded-2xl border border-[#E8DFD3]">
-                <h4 className="font-bold text-sm text-[#2B241D] flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-[#B5563C]" /> Email Customer Care
-                </h4>
-                <p className="mt-1 text-stone-600">Write to <strong>care@shreekrishnaorganics.com</strong> for bulk orders or test reports. Replies within 12h.</p>
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <Link
-                to="/contact"
+              <button
+                type="button"
                 onClick={() => setHelpModalOpen(false)}
-                className="px-5 py-2.5 bg-[#2B241D] hover:bg-[#B5563C] text-white rounded-xl text-xs font-bold transition-colors inline-flex items-center gap-1.5"
+                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
+                aria-label="Close help desk"
               >
-                <span>Visit Contact Page</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+                <X className="w-5 h-5" />
+              </button>
+
             </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-4">
+
+              {/* Phone */}
+              <div className="rounded-2xl border border-[#DED8C8] bg-white/60 p-4 flex items-start gap-4">
+
+                <div className="w-11 h-11 rounded-xl bg-[#E7EBDD] flex items-center justify-center shrink-0">
+                  <Phone className="w-5 h-5 text-[#3F5F45]" />
+                </div>
+
+                <div>
+                  <p className="font-bold text-[#2F4935]">
+                    Call Us
+                  </p>
+
+                  <a
+                    href="tel:+919876543210"
+                    className="text-sm text-[#687064] hover:text-[#3F5F45] transition-colors"
+                  >
+                    +91 98765 43210
+                  </a>
+
+                  <p className="text-xs text-[#8A9186] mt-1">
+                    Mon–Sat, 9am–7pm
+                  </p>
+                </div>
+
+              </div>
+
+              {/* Track Order */}
+              <div className="rounded-2xl border border-[#DED8C8] bg-white/60 p-4 flex items-start gap-4">
+
+                <div className="w-11 h-11 rounded-xl bg-[#E7EBDD] flex items-center justify-center shrink-0">
+                  <Truck className="w-5 h-5 text-[#3F5F45]" />
+                </div>
+
+                <div className="flex-1">
+
+                  <p className="font-bold text-[#2F4935]">
+                    Track Your Order
+                  </p>
+
+                  <p className="text-sm text-[#687064] mt-1">
+                    Check the latest status of your order.
+                  </p>
+
+                  <Link
+                    to="/orders"
+                    onClick={() => setHelpModalOpen(false)}
+                    className="inline-flex items-center gap-1.5 mt-2 text-sm font-bold text-[#3F5F45] hover:text-[#718355]"
+                  >
+                    Track Order
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                </div>
+
+              </div>
+
+              {/* Email */}
+              <div className="rounded-2xl border border-[#DED8C8] bg-white/60 p-4 flex items-start gap-4">
+
+                <div className="w-11 h-11 rounded-xl bg-[#E7EBDD] flex items-center justify-center shrink-0">
+                  <Mail className="w-5 h-5 text-[#3F5F45]" />
+                </div>
+
+                <div>
+
+                  <p className="font-bold text-[#2F4935]">
+                    Email Support
+                  </p>
+
+                  <a
+                    href="mailto:care@shreekrishnaorganics.com"
+                    className="text-sm text-[#687064] hover:text-[#3F5F45] transition-colors break-all"
+                  >
+                    care@shreekrishnaorganics.com
+                  </a>
+
+                  <p className="text-xs text-[#8A9186] mt-1">
+                    We usually respond within one business day.
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* Contact */}
+              <div className="pt-2">
+
+                <Link
+                  to="/contact"
+                  onClick={() => setHelpModalOpen(false)}
+                  className="w-full rounded-xl bg-[#3F5F45] hover:bg-[#2F4935] text-white font-bold py-3.5 px-5 flex items-center justify-center gap-2 transition-all"
+                >
+                  Contact Us
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+              </div>
+
+            </div>
+
           </div>
+
         </div>
       )}
     </>
   );
-}
+};
+
+export default Footer;

@@ -1,346 +1,730 @@
-import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, Menu, X, Search, ChevronDown, Package, LogOut, Phone, Sparkles } from 'lucide-react';
-import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  ShoppingBag,
+  User,
+  Menu,
+  X,
+  Search,
+  ChevronDown,
+  Package,
+  LogOut,
+  Phone,
+  Leaf,
+  ArrowRight,
+} from "lucide-react";
 
-export default function Navbar() {
+import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+
+function Navbar() {
   const { totalItems, subtotal } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+
   const navigate = useNavigate();
+
+  const navLinks = [
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "Products",
+      path: "/shop",
+    },
+    {
+      name: "About Us",
+      path: "/about",
+    },
+    {
+      name: "Contact",
+      path: "/contact",
+    },
+  ];
+
+  // =====================================================
+  // SEARCH
+  // =====================================================
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+
+    const searchText = searchQuery.trim();
+
+    if (searchText) {
+      const params = new URLSearchParams();
+      params.set("search", searchText);
+
+      navigate("/shop?" + params.toString());
+
+      setSearchQuery("");
       setSearchOpen(false);
       setMobileMenuOpen(false);
     }
   };
 
-  // Wireframe Header Nav: Home, Products, About Us, Contact
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Products', path: '/shop' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Contact', path: '/contact' }
-  ];
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
+  const handleLogout = () => {
+    logout();
+
+    setUserDropdownOpen(false);
+    setMobileMenuOpen(false);
+
+    navigate("/");
+  };
+
+  // =====================================================
+  // CLOSE MOBILE MENU
+  // =====================================================
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
 
   return (
     <>
-      {/* 1. Top Daily Updates Ticker / Announcement Bar */}
-      <div className="bg-[#1F1813] text-[#FAF6EF] py-2 px-4 text-xs tracking-wide border-b border-[#2B241D]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="hidden sm:flex items-center gap-2 text-stone-300">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#B5563C] animate-pulse" />
-            <span className="font-medium">100% Traditional Vaagai Wood-Pressed • Certified Organic</span>
-          </div>
+      {/* =====================================================
+          TOP ANNOUNCEMENT BAR
+      ====================================================== */}
 
-          <div className="flex-1 text-center sm:flex-none">
-            <span>
-              🌿 Free Shipping on orders over <strong className="text-[#C68A2E]">₹999</strong> • Use code <span className="bg-[#2B241D] px-1.5 py-0.5 rounded font-mono font-bold text-[#FAF6EF] border border-[#B5563C]/50">SHREEKRISHNA10</span> for 10% Off
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-4 text-stone-300">
-            <Link to="/contact" className="hover:text-white transition-colors flex items-center gap-1.5">
-              <Phone className="w-3 h-3 text-[#B5563C]" />
-              <span>Care: +91 98765 43210</span>
-            </Link>
-          </div>
+      <div className="bg-[#173b2a] text-white">
+        <div className="mx-auto flex min-h-[34px] max-w-7xl items-center justify-center px-4 text-center">
+          <p className="text-[11px] font-medium tracking-wide sm:text-xs">
+            🌿 Pure. Natural. Organic. &nbsp; | &nbsp; Free delivery on orders
+            above ₹999
+          </p>
         </div>
       </div>
 
-      {/* 2. Main Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[#FAF6EF]/95 backdrop-blur-md border-b border-[#E8DFD3] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            
-            {/* Mobile menu trigger */}
-            <div className="flex items-center lg:hidden">
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl text-stone-700 hover:text-[#2B241D] hover:bg-[#ECE4D8] transition-colors"
-                aria-label="Toggle navigation menu"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+      {/* =====================================================
+          MAIN NAVBAR
+          
+      ====================================================== */}
 
-            {/* Brand Logo Treatment - ShreeKrishna Organics */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-2xl bg-[#2B241D] text-[#FAF6EF] flex items-center justify-center font-display font-bold text-lg shadow-xs group-hover:bg-[#B5563C] transition-all duration-300 border border-[#B5563C]/30">
-                SK
+      <header className="sticky top-0 z-40 border-b border-[#d8e5d7] bg-[#edf4ed]/95 shadow-sm backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8">
+          <div className="flex h-[72px] items-center justify-between gap-2 sm:h-20">
+
+            {/* =================================================
+                MOBILE MENU BUTTON
+            ================================================= */}
+
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[#173b2a] transition hover:bg-[#dcebdc] lg:hidden"
+              aria-label="Open menu"
+            >
+              <Menu size={23} />
+            </button>
+
+            {/* =================================================
+                LOGO
+            ================================================= */}
+
+            <Link
+              to="/"
+              onClick={closeMobileMenu}
+              className="group flex min-w-0 items-center gap-2 sm:gap-3"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#173b2a] shadow-sm sm:h-12 sm:w-12">
+                <Leaf
+                  size={21}
+                  className="text-[#d8b76a] sm:h-6 sm:w-6"
+                  strokeWidth={1.8}
+                />
               </div>
-              <div className="flex flex-col">
-                <span className="font-serif font-bold text-xl sm:text-2xl tracking-tight text-[#2B241D] leading-none">
-                  ShreeKrishna Organics
-                </span>
-                <span className="text-[10px] tracking-[0.25em] text-[#B5563C] font-semibold uppercase mt-0.5">
-                  Pure Tradition, Naturally
-                </span>
+
+              <div className="min-w-0">
+                <h1 className="truncate text-[15px] font-bold leading-tight tracking-wide text-[#173b2a] sm:text-lg">
+                  ShreeKrishna
+                </h1>
+
+                <p className="hidden text-[9px] font-medium uppercase tracking-[0.22em] text-[#a47b30] sm:block sm:text-[10px]">
+                  Organics
+                </p>
               </div>
             </Link>
 
-            {/* Desktop Navigation Links (Simplified: Home, Products, About Us, Contact) */}
-            <nav className="hidden lg:flex items-center gap-8">
+            {/* =================================================
+                DESKTOP NAVIGATION
+            ================================================= */}
+
+            <nav className="hidden items-center gap-7 lg:flex xl:gap-9">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.path}
                   to={link.path}
+                  end={link.path === "/"}
                   className={({ isActive }) =>
-                    `text-sm font-medium transition-colors hover:text-[#B5563C] relative py-1 ${
+                    [
+                      "relative rounded-full px-3 py-2 text-sm font-medium transition-all",
                       isActive
-                        ? 'text-[#2B241D] font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#B5563C] after:rounded-full'
-                        : 'text-stone-600'
-                    }`
+                        ? "bg-[#dcebdc] text-[#173b2a]"
+                        : "text-[#4f5c51] hover:bg-[#dcebdc] hover:text-[#173b2a]",
+                    ].join(" ")
                   }
                 >
-                  {link.name}
+                  {({ isActive }) => (
+                    <>
+                      {link.name}
+
+                      {isActive && (
+                        <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#b88a3b]" />
+                      )}
+                    </>
+                  )}
                 </NavLink>
               ))}
             </nav>
 
-            {/* Right Action Icons (Search, Account, Cart) */}
-            <div className="flex items-center gap-2 sm:gap-4">
-              
-              {/* Search Toggle */}
+            {/* =================================================
+                RIGHT ACTIONS
+            ================================================= */}
+
+            <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+
+              {/* SEARCH */}
+
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setSearchOpen(!searchOpen)}
-                  className="p-2 rounded-xl text-stone-700 hover:text-[#2B241D] hover:bg-[#ECE4D8] transition-colors cursor-pointer"
-                  aria-label="Search products"
+                  className="flex h-10 w-10 items-center justify-center rounded-full text-[#173b2a] transition hover:bg-[#dcebdc]"
+                  aria-label="Search"
                 >
-                  <Search className="w-5 h-5" />
+                  <Search size={20} />
                 </button>
 
+                {/* Desktop Search */}
+
                 {searchOpen && (
-                  <form
-                    onSubmit={handleSearchSubmit}
-                    className="absolute right-0 top-12 w-72 sm:w-80 bg-white p-2.5 rounded-2xl shadow-card border border-[#E8DFD3] z-50 animate-in fade-in zoom-in-95"
-                  >
-                    <div className="flex items-center gap-2 bg-[#FAF6EF] px-3 py-2 rounded-xl border border-stone-200">
-                      <Search className="w-4 h-4 text-stone-400 shrink-0" />
-                      <input
-                        type="text"
-                        placeholder="Search mustard oil, jaggery, ghee..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        autoFocus
-                        className="w-full bg-transparent text-xs text-stone-800 placeholder-stone-400 focus:outline-none"
-                      />
+                  <div className="absolute right-0 top-12 z-50 hidden w-[320px] rounded-2xl border border-[#d8e5d7] bg-white p-3 shadow-xl sm:block">
+                    <form
+                      onSubmit={handleSearchSubmit}
+                      className="flex items-center gap-2"
+                    >
+                      <div className="relative flex-1">
+                        <Search
+                          size={17}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Search products..."
+                          autoFocus
+                          className="h-11 w-full rounded-xl border border-[#d8e5d7] bg-[#f8fbf7] pl-10 pr-3 text-sm outline-none transition focus:border-[#6f936f] focus:ring-2 focus:ring-[#dce9dc]"
+                        />
+                      </div>
+
                       <button
                         type="submit"
-                        className="text-xs bg-[#2B241D] hover:bg-[#B5563C] text-white px-3 py-1.5 rounded-lg font-medium transition-colors cursor-pointer"
+                        className="flex h-11 shrink-0 items-center justify-center rounded-xl bg-[#173b2a] px-4 text-sm font-semibold text-white transition hover:bg-[#24573e]"
                       >
-                        Find
+                        Search
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+
+              {/* DESKTOP USER */}
+
+              {isAuthenticated ? (
+                <div className="relative hidden lg:block">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setUserDropdownOpen(!userDropdownOpen)
+                    }
+                    className="flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-[#173b2a] transition hover:bg-[#dcebdc]"
+                  >
+                    <User size={19} />
+
+                    <span className="max-w-[90px] truncate">
+                      {user?.name || "Account"}
+                    </span>
+
+                    <ChevronDown
+                      size={15}
+                      className={`transition-transform ${
+                        userDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* USER DROPDOWN */}
+
+                  {userDropdownOpen && (
+                    <div className="absolute right-0 top-12 z-50 w-56 overflow-hidden rounded-2xl border border-[#d8e5d7] bg-white shadow-xl">
+
+                      <div className="border-b border-[#e1e9df] bg-[#edf4ed] px-4 py-3">
+                        <p className="text-xs text-gray-500">
+                          Signed in as
+                        </p>
+
+                        <p className="mt-1 truncate text-sm font-semibold text-[#173b2a]">
+                          {user?.name || "User"}
+                        </p>
+
+                        {user?.email && (
+                          <p className="mt-0.5 truncate text-xs text-gray-500">
+                            {user.email}
+                          </p>
+                        )}
+                      </div>
+
+                      <Link
+                        to="/orders"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition hover:bg-[#f1f7ef]"
+                      >
+                        <Package
+                          size={18}
+                          className="text-[#4f795b]"
+                        />
+                        My Orders
+                      </Link>
+
+                      <Link
+                        to="/account"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition hover:bg-[#f1f7ef]"
+                      >
+                        <User
+                          size={18}
+                          className="text-[#4f795b]"
+                        />
+                        My Account
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-3 border-t border-[#e1e9df] px-4 py-3 text-left text-sm text-red-600 transition hover:bg-red-50"
+                      >
+                        <LogOut size={18} />
+                        Logout
                       </button>
                     </div>
-                  </form>
-                )}
-              </div>
-
-              {/* User Account Dropdown */}
-              <div className="relative">
-                {isAuthenticated ? (
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-white border border-[#E8DFD3] hover:border-[#B5563C]/50 text-stone-800 transition-all cursor-pointer"
-                    >
-                      <div className="w-6 h-6 rounded-full bg-[#2B241D] text-white text-xs font-bold flex items-center justify-center">
-                        {user.name.charAt(0)}
-                      </div>
-                      <span className="hidden sm:inline text-xs font-semibold text-stone-800 max-w-[100px] truncate">
-                        {user.name.split(' ')[0]}
-                      </span>
-                      <ChevronDown className="w-3.5 h-3.5 text-stone-500" />
-                    </button>
-
-                    {userDropdownOpen && (
-                      <div
-                        className="absolute right-0 top-12 w-52 bg-white rounded-2xl shadow-card border border-[#E8DFD3] p-2 z-50 animate-in fade-in"
-                        onClick={() => setUserDropdownOpen(false)}
-                      >
-                        <div className="px-3 py-2 border-b border-stone-100 mb-1">
-                          <p className="text-xs font-bold text-stone-800 truncate">{user.name}</p>
-                          <p className="text-[11px] text-stone-400 truncate">{user.email}</p>
-                        </div>
-                        <Link
-                          to="/orders"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 hover:bg-[#FAF6EF] hover:text-[#B5563C]"
-                        >
-                          <Package className="w-4 h-4 text-stone-500" />
-                          <span>My Orders & Tracking</span>
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={logout}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-red-600 hover:bg-red-50 text-left cursor-pointer"
-                        >
-                          <LogOut className="w-4 h-4 text-red-500" />
-                          <span>Sign Out</span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    to="/login"
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:text-[#2B241D] hover:bg-[#ECE4D8] transition-colors"
-                  >
-                    <User className="w-4 h-4" />
-                    <span className="hidden sm:inline">Sign In</span>
-                  </Link>
-                )}
-              </div>
-
-              {/* Cart Button */}
-              <Link
-                to="/cart"
-                className="relative flex items-center gap-2 px-3.5 py-2 bg-[#2B241D] text-[#FAF6EF] rounded-xl hover:bg-[#B5563C] active:scale-95 transition-all shadow-xs group"
-                aria-label={`Shopping cart with ${totalItems} items`}
-              >
-                <div className="relative">
-                  <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-[#B5563C] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
-                      {totalItems}
-                    </span>
                   )}
                 </div>
-                <span className="hidden sm:inline text-xs font-bold">
-                  {totalItems > 0 ? `₹${subtotal}` : 'Cart'}
-                </span>
+              ) : (
+                <Link
+                  to="/login"
+                  className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-[#173b2a] transition hover:bg-[#dcebdc] sm:flex"
+                >
+                  <User size={19} />
+                  <span>Sign In</span>
+                </Link>
+              )}
+
+              {/* MOBILE USER */}
+
+              <Link
+                to={isAuthenticated ? "/account" : "/login"}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-[#173b2a] transition hover:bg-[#dcebdc] sm:hidden"
+                aria-label={
+                  isAuthenticated ? "Account" : "Sign in"
+                }
+              >
+                <User size={20} />
+              </Link>
+
+              {/* CART */}
+
+              <Link
+                to="/cart"
+                className="group relative flex h-10 w-10 items-center justify-center rounded-full text-[#173b2a] transition hover:bg-[#dcebdc]"
+                aria-label="Shopping cart"
+              >
+                <ShoppingBag
+                  size={21}
+                  className="transition group-hover:scale-105"
+                />
+
+                {totalItems > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-[#b88a3b] px-1 text-[10px] font-bold text-white ring-2 ring-[#edf4ed]">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
               </Link>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* =====================================================
+          MOBILE SEARCH
+      ====================================================== */}
+
+      {searchOpen && (
+        <div className="fixed inset-x-0 top-[106px] z-30 border-b border-[#d8e5d7] bg-[#edf4ed] p-3 shadow-md sm:hidden">
+          <form
+            onSubmit={handleSearchSubmit}
+            className="mx-auto flex max-w-xl items-center gap-2"
+          >
+            <div className="relative flex-1">
+              <Search
+                size={17}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              />
+
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                autoFocus
+                className="h-11 w-full rounded-xl border border-[#d8e5d7] bg-white pl-10 pr-3 text-sm outline-none focus:border-[#6f936f] focus:ring-2 focus:ring-[#dce9dc]"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="h-11 rounded-xl bg-[#173b2a] px-4 text-sm font-semibold text-white"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* =====================================================
+          MOBILE DRAWER
+          
+      ====================================================== */}
+
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs"
-            onClick={() => setMobileMenuOpen(false)}
+        <div className="fixed inset-0 z-[100] lg:hidden">
+
+          {/* OVERLAY */}
+
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={closeMobileMenu}
+            className="absolute inset-0 h-full w-full cursor-default bg-black/40 backdrop-blur-[2px]"
           />
 
-          {/* Drawer content */}
-          <div className="relative w-4/5 max-w-sm bg-[#FAF6EF] h-full shadow-2xl flex flex-col p-6 overflow-y-auto z-10 animate-in slide-in-from-left duration-300">
-            <div className="flex items-center justify-between pb-6 border-b border-[#E8DFD3]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#2B241D] text-[#FAF6EF] flex items-center justify-center font-serif font-bold text-sm">
-                  SK
+          {/* DRAWER */}
+
+          <aside className="absolute left-0 top-0 flex h-full w-[88%] max-w-[390px] flex-col bg-[#f1f7ef] shadow-2xl">
+
+            {/* =================================================
+                DRAWER HEADER
+            ================================================= */}
+
+            <div className="flex h-[76px] shrink-0 items-center justify-between border-b border-[#d8e5d7] bg-[#edf4ed] px-5">
+
+              <Link
+                to="/"
+                onClick={closeMobileMenu}
+                className="flex items-center gap-3"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#173b2a]">
+                  <Leaf
+                    size={23}
+                    className="text-[#d8b76a]"
+                    strokeWidth={1.8}
+                  />
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-serif font-bold text-base text-[#2B241D]">ShreeKrishna</span>
-                  <span className="text-[9px] tracking-wider text-[#B5563C] font-semibold uppercase">Organics</span>
+
+                <div>
+                  <p className="text-base font-bold leading-none text-[#173b2a]">
+                    ShreeKrishna
+                  </p>
+
+                  <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-[#a47b30]">
+                    Organics
+                  </p>
                 </div>
-              </div>
+              </Link>
+
               <button
                 type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-1 rounded-lg text-stone-600 hover:bg-stone-200"
+                onClick={closeMobileMenu}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-[#173b2a] transition hover:bg-[#dcebdc]"
+                aria-label="Close menu"
               >
-                <X className="w-6 h-6" />
+                <X size={23} />
               </button>
             </div>
 
-            {/* Mobile Search */}
-            <form onSubmit={handleSearchSubmit} className="mt-4">
-              <div className="flex items-center gap-2 bg-white px-3 py-2.5 rounded-xl border border-stone-200 shadow-2xs">
-                <Search className="w-4 h-4 text-stone-400 shrink-0" />
-                <input
-                  type="text"
-                  placeholder="Search oils, jaggery, ghee..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full text-xs text-stone-800 placeholder-stone-400 focus:outline-none"
-                />
-              </div>
-            </form>
+            {/* =================================================
+                DRAWER CONTENT
+            ================================================= */}
 
-            {/* Navigation links */}
-            <div className="flex flex-col gap-2 mt-6">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-[#2B241D] text-white font-bold'
-                        : 'text-stone-800 hover:bg-[#ECE4D8]'
-                    }`
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              ))}
-              <NavLink
-                to="/orders"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-3 rounded-xl text-sm font-medium text-stone-800 hover:bg-[#ECE4D8]"
+            <div className="flex-1 overflow-y-auto px-5 py-5">
+
+              {/* MOBILE SEARCH */}
+
+              <form
+                onSubmit={handleSearchSubmit}
+                className="mb-6 flex items-center gap-2"
               >
-                My Orders & Tracking
-              </NavLink>
+                <div className="relative flex-1">
+                  <Search
+                    size={17}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  />
+
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) =>
+                      setSearchQuery(e.target.value)
+                    }
+                    placeholder="Search products..."
+                    className="h-11 w-full rounded-xl border border-[#d8e5d7] bg-white pl-10 pr-3 text-sm outline-none focus:border-[#6f936f] focus:ring-2 focus:ring-[#dce9dc]"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#173b2a] text-white"
+                  aria-label="Search"
+                >
+                  <Search size={18} />
+                </button>
+              </form>
+
+              {/* MENU TITLE */}
+
+              <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#a47b30]">
+                Menu
+              </p>
+
+              {/* NAVIGATION */}
+
+              <nav className="space-y-1">
+                {navLinks.map((link) => (
+                  <NavLink
+                    key={link.path}
+                    to={link.path}
+                    end={link.path === "/"}
+                    onClick={closeMobileMenu}
+                    className={({ isActive }) =>
+                      [
+                        "flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-medium transition",
+                        isActive
+                          ? "bg-[#dcebdc] text-[#173b2a] shadow-sm"
+                          : "text-[#454c45] hover:bg-[#e5efe3]",
+                      ].join(" ")
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <span>{link.name}</span>
+
+                        {isActive && (
+                          <span className="h-2 w-2 rounded-full bg-[#b88a3b]" />
+                        )}
+                      </>
+                    )}
+                  </NavLink>
+                ))}
+              </nav>
+
+              {/* =================================================
+                  QUICK LINKS
+              ================================================= */}
+
+              <div className="mt-6 border-t border-[#d8e5d7] pt-5">
+
+                <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#a47b30]">
+                  Quick Links
+                </p>
+
+                {isAuthenticated && (
+                  <Link
+                    to="/orders"
+                    onClick={closeMobileMenu}
+                    className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-medium text-[#454c45] transition hover:bg-[#e5efe3]"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Package
+                        size={19}
+                        className="text-[#4f795b]"
+                      />
+                      My Orders
+                    </span>
+
+                    <ArrowRight
+                      size={17}
+                      className="text-gray-400"
+                    />
+                  </Link>
+                )}
+
+                <Link
+                  to="/cart"
+                  onClick={closeMobileMenu}
+                  className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-medium text-[#454c45] transition hover:bg-[#e5efe3]"
+                >
+                  <span className="flex items-center gap-3">
+                    <ShoppingBag
+                      size={19}
+                      className="text-[#4f795b]"
+                    />
+                    Shopping Cart
+                  </span>
+
+                  <span className="flex items-center gap-2">
+                    {totalItems > 0 && (
+                      <span className="rounded-full bg-[#b88a3b] px-2 py-0.5 text-[10px] font-bold text-white">
+                        {totalItems}
+                      </span>
+                    )}
+
+                    <ArrowRight
+                      size={17}
+                      className="text-gray-400"
+                    />
+                  </span>
+                </Link>
+
+                <Link
+                  to="/contact"
+                  onClick={closeMobileMenu}
+                  className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-medium text-[#454c45] transition hover:bg-[#e5efe3]"
+                >
+                  <span className="flex items-center gap-3">
+                    <Phone
+                      size={19}
+                      className="text-[#4f795b]"
+                    />
+                    Contact Us
+                  </span>
+
+                  <ArrowRight
+                    size={17}
+                    className="text-gray-400"
+                  />
+                </Link>
+              </div>
+
+              {/* =================================================
+                  ORGANIC CARD
+              ================================================= */}
+
+              <div className="mt-6 overflow-hidden rounded-2xl bg-[#173b2a] p-5 text-white">
+
+                <div className="flex items-start gap-3">
+
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10">
+                    <Leaf
+                      size={20}
+                      className="text-[#d8b76a]"
+                    />
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-semibold">
+                      Naturally better
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-white/70">
+                      Organic products carefully selected for
+                      your everyday wellness.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* User Account / Auth Section in Drawer */}
-            <div className="mt-auto pt-6 border-t border-[#E8DFD3]">
+            {/* =================================================
+                DRAWER FOOTER
+            ================================================= */}
+
+            <div className="shrink-0 border-t border-[#d8e5d7] bg-[#e8f1e6] p-5">
+
               {isAuthenticated ? (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#2B241D] text-white text-sm font-bold flex items-center justify-center">
-                      {user.name.charAt(0)}
+                <div>
+
+                  <div className="mb-3 flex items-center gap-3">
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d1e3d0] text-[#173b2a]">
+                      <User size={19} />
                     </div>
-                    <div>
-                      <p className="text-xs font-bold text-stone-800">{user.name}</p>
-                      <p className="text-[11px] text-stone-500">{user.email}</p>
+
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-[#173b2a]">
+                        {user?.name || "My Account"}
+                      </p>
+
+                      {user?.email && (
+                        <p className="truncate text-xs text-gray-500">
+                          {user.email}
+                        </p>
+                      )}
                     </div>
                   </div>
+
                   <button
-                    onClick={() => {
-                      logout();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full py-2.5 px-4 bg-stone-200/80 hover:bg-stone-300 text-stone-800 rounded-xl text-xs font-semibold cursor-pointer"
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-white py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50"
                   >
-                    Log Out
+                    <LogOut size={17} />
+                    Logout
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2">
+                <Link
+                  to="/login"
+                  onClick={closeMobileMenu}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#173b2a] py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#24573e]"
+                >
+                  <User size={18} />
+                  Sign In / Register
+                </Link>
+              )}
+
+              {/* CART SUMMARY */}
+
+              {totalItems > 0 && (
+                <div className="mt-3 flex items-center justify-between rounded-xl bg-white px-4 py-3">
+
+                  <div>
+                    <p className="text-xs text-gray-500">
+                      Cart total
+                    </p>
+
+                    <p className="text-sm font-bold text-[#173b2a]">
+                      ₹
+                      {Number(subtotal || 0).toLocaleString(
+                        "en-IN"
+                      )}
+                    </p>
+                  </div>
+
                   <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="py-2.5 text-center bg-[#2B241D] text-white text-xs font-semibold rounded-xl"
+                    to="/cart"
+                    onClick={closeMobileMenu}
+                    className="text-xs font-semibold text-[#a47b30]"
                   >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="py-2.5 text-center bg-white border border-stone-300 text-stone-800 text-xs font-semibold rounded-xl"
-                  >
-                    Register
+                    View cart →
                   </Link>
                 </div>
               )}
             </div>
-          </div>
+          </aside>
         </div>
       )}
     </>
   );
 }
+
+export default Navbar;
